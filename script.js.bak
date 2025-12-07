@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment YORIE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLp3+o+e6s6P+o+B/x0A+K78KkG7t0N9j9+h3uU8/aR8/X+q6+0uL7zWw5L4z4p+E6/Q9wWbBw/z5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0b001f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 28px;
+      color: #9b59ff;
+      text-shadow: 0 0 10px #9b59ff, 0 0 20px #6e0fff;
+      margin-bottom: 15px;
+    }
+
+    /* Tambahan Style untuk Nama Host */
+    .host-name {
+        font-size: 18px; 
+        color: #e0d4ff; 
+        margin-top: -5px; 
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    /* Payment Card */
+    .payment {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 30px rgba(107,0,255,0.5);
+      backdrop-filter: blur(10px) saturate(120%);
+    }
+    
+    /* Style untuk garis pemisah */
+    .separator {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #9b59ff, transparent);
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    /* Penampung QRIS agar bisa diposisikan relatif */
+    .qris-container {
+        position: relative;
+        display: block; 
+        width: 250px; 
+        margin: 0 auto; 
+        text-align: center;
+        margin-top: 30px; 
+    }
+
+    /* Ikon di atas QR */
+    .qris-icon {
+        position: absolute;
+        top: -15px; 
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 30px;
+        color: #fff;
+        background: #0b001f; 
+        padding: 5px 10px;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(155, 89, 255, 0.8);
+        z-index: 10;
+    }
+    
+    /* Logo Foto di tengah atas (BULET DENGAN URL GAMBAR) */
+    .logo-header {
+        position: relative;
+        display: block;
+        width: 60px;
+        height: 60px;
+        margin: -10px auto 10px auto; 
+        border-radius: 50%;
+        background-image: url('https://files.catbox.moe/ns8bej.jpg'); 
+        background-size: cover; 
+        background-position: center; 
+        background-color: #9b59ff; 
+        
+        /* GARIS PUTIH DENGAN EFEK NYALA (GLOW EFFECT) */
+        border: 3px solid white;
+        box-shadow: 
+          0 0 5px white, 
+          0 0 15px #9b59ff, 
+          0 0 25px rgba(155, 89, 255, 0.9); 
+        z-index: 20;
+    }
+
+    .qris {
+      width: 250px; 
+      height: 250px; 
+      border-radius: 12px;
+      margin: 10px 0;
+      border: 2px solid #9b59ff;
+      box-shadow: 0 0 10px #6e0fff;
+      background: #2a1144; 
+      object-fit: cover;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: #9b59ff;
+      color: white;
+      padding: 10px 18px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 0 12px #6e0fff;
+      transition: 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #6e0fff;
+      box-shadow: 0 0 18px #9b59ff;
+    }
+
+    .pay-box {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pay-item {
+      background: rgba(255,255,255,0.05);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #e0d4ff;
+      box-shadow: 0 0 8px #7b2cbf;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .nomor-tampil {
+        /* Memastikan teks nomor tetap terlihat */
+        font-weight: bold;
+    }
+
+    .btn {
+      background: #9b59ff;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #6e0fff;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #6e0fff;
+      box-shadow: 0 0 10px #9b59ff;
+    }
+
+    form {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    /* Style untuk input nama dan nominal */
+    .input-nama {
+        width: 80%;
+        max-width: 300px;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #9b59ff;
+        background: rgba(255,255,255,0.05);
+        color: white;
+        font-size: 16px;
+        text-align: center;
+    }
+    input[type="file"] {
+      border-radius: 6px;
+      padding: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #9b59ff;
+      color: white;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="payment">
+  <div class="logo-header"></div>
+  
+  <p class="host-name">YORIE HOST</p>
+  
+  <h2 style="margin-top: -10px;">Metode Pembayaran</h2>
+
+  <h3 style="margin-top:0;">Upload Bukti Pembayaran (Otomatis ke WhatsApp)</h3>
+  
+  <div class="separator"></div>
+  
+  <form action="https://formsubmit.co/eekbau113@gmail.com" method="POST" enctype="multipart/form-data" onsubmit="return handleUpload()">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" id="email-subject" value="Bukti Pembayaran dari Pelanggan">
+    <input type="hidden" name="_next" id="next-link" value="#">
+    
+    <input type="text" name="Nama_Pengirim" id="userInputName" class="input-nama" placeholder="Masukkan Nama Anda (Wajib)" required>
+
+    <input type="number" name="Nominal_Transfer" id="transferAmountInput" class="input-nama" placeholder="Masukkan Nominal Transfer (Wajib)" required>
+
+    <input type="file" name="attachment" id="fileInput" accept="image/*,.pdf" required><br><br>
+    <button type="submit" class="download-btn">📤 Upload & Kirim ke CS</button>
+  </form>
+
+  <div class="pay-box">
+    <div class="pay-item">
+      Dana: 
+      <span class="nomor-tampil">085215996783</span>
+      <input type="hidden" id="dana" value="085215996783"> <button class="btn" onclick="salin('dana')">SALIN</button>
+    </div>
+    <div class="pay-item">
+      Gopay: 
+      <span class="nomor-tampil">081219010585</span>
+      <input type="hidden" id="gopay" value="081219010585"> <button class="btn" onclick="salin('gopay')">SALIN</button>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px;">
+      <p style="margin-bottom: 0;">Scan QRIS</p>
+  </div>
+
+  <div class="qris-container">
+      <i class="fas fa-qrcode qris-icon"></i>
+      <img src="https://files.catbox.moe/ns8bej.jpg" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0EQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='" alt="QRIS Yorie" class="qris" />
+  </div>
+  <br>
+  <a class="download-btn" href="https://files.catbox.moe/g8hie4.png" download>⬇ Download QRIS</a>
+</div>
+
+<script>
+  // FUNGSI SALIN BARU (Lebih Andal dengan menargetkan input tersembunyi)
+  function salin(id) {
+    const inputElement = document.getElementById(id); // Ambil elemen input hidden
+    
+    if (inputElement) {
+        // Pilih teks di dalam input
+        inputElement.select();
+        // Untuk perangkat mobile, pastikan rentang seleksi diatur
+        inputElement.setSelectionRange(0, 99999); 
+
+        try {
+            // Gunakan metode salin lama yang lebih kompatibel
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert("✅ Nomor berhasil disalin: " + inputElement.value);
+            } else {
+                alert("❌ Gagal menyalin. Silakan salin manual: " + inputElement.value);
+            }
+        } catch (err) {
+            alert("❌ Gagal menyalin. Silakan salin manual: " + inputElement.value);
+        }
+    } else {
+        alert("Elemen salin tidak ditemukan!");
+    }
+  }
+
+  // Upload otomatis ke WhatsApp dan atur Nama di Email Subject
+  function handleUpload() {
+    const fileInput = document.getElementById('fileInput');
+    const nameInput = document.getElementById('userInputName');
+    // Ganti ID agar tidak berbenturan dengan fungsi salin
+    const amountInput = document.getElementById('transferAmountInput'); 
+    
+    const userName = nameInput.value.trim() || 'Pelanggan Anonim'; 
+    const transferAmount = amountInput.value.trim() || 'Tidak Disebutkan'; 
+    const fileName = fileInput.files[0]?.name || 'Bukti Pembayaran';
+
+    // 1. Kirim ke WhatsApp
+    const whatsappLink = `https://wa.me/6285215996783?text=Halo%20kak%2C%20saya%20sudah%20melakukan%20pembayaran%20atas%20nama%3A%20*${encodeURIComponent(userName)}*%0ANominal%20Transfer%3A%20*Rp%20${encodeURIComponent(transferAmount)}*%0ABukti%3A%20*${fileName}*%0ATolong%20cek%20ya%20Kak~`;
+    document.getElementById('next-link').value = whatsappLink;
+
+    // 2. Kirim ke Email Subject
+    document.getElementById('email-subject').value = \`Bukti Pembayaran Rp \${transferAmount} dari: \${userName}\`;
+    
+    return true;
+  }
+</script>
+
+</body>
+  </html>
