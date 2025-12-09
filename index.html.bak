@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Tangkap Bintang Cepat! 🌠</h1>
+        <h1>Tangkap Bintang! 🌠</h1>
         <p>Skor: <span id="score">0</span></p>
         <div id="game-area">
             </div>
